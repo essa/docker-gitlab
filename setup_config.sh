@@ -9,6 +9,7 @@ else
      exit 1
 fi
 
+            echo "s/LSYNCD_USER/$LsyncdIdentityFile/" 
 cd config_sample
 for f in *
 do
@@ -21,6 +22,9 @@ do
             -e "s/MYSQL_ROOT_PASSWORD/$MySQLPasswordForRoot/" \
             -e "s/MYSQL_SERVER_IP/$MySQLServerIP/" \
             -e "s/MYSQL_SERVER_PORT/$MySQLServerPort/" \
+            -e "s/LSYNCD_TARGET_HOST/$LsyncdTargetHost/" \
+            -e "s/LSYNCD_USER/$LsyncdUser/" \
+            -e "s|LSYNCD_IDENTITY_FILE|$LsyncdIdentityFile|" \
             $f > ../config/$f
     fi
 done

@@ -3,7 +3,6 @@ MAINTAINER Taku Nakajima <takunakajima@gmail.com>
 
 ENV USER lsyncd
 ENV PASSWORD lsyncd
-ENV ROOTPASSWORD root-defaultpass
 
 # Run upgrades
 RUN echo deb http://us.archive.ubuntu.com/ubuntu/ precise universe multiverse >> /etc/apt/sources.list;\
@@ -26,6 +25,9 @@ RUN apt-get install -y openssh-server sudo && mkdir /var/run/sshd
 
 RUN useradd $USER && adduser $USER sudo && echo "${USER}:${PASSWORD}" |chpasswd && mkdir /home/$USER && chown -R $USER /home/$USER && chsh -s /bin/bash $USER
 
+# mkdir for mouting data directory 
+RUN mkdir -p /mnt/data
+
 EXPOSE 22
-CMD    /usr/sbin/sshd -D
+CMD /usr/sbin/sshd && lsyncd -nodaemon -rsyncssh /mnt/data lsyncd_target lsyncd_data
 

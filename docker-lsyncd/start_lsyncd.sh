@@ -5,6 +5,15 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
-mkdir -p home
-#docker run -d -p 10022:22 -v `pwd`/home:/home/lsyncd:rw essa/lsyncd lsyncd -nodaemon -rsyncssh /home/lsyncd/data sakuravps2 replica/lsyncd
-docker run -d -p 10022:22 -v `pwd`/home:/home/lsyncd:rw -v $1:/home/data essa/lsyncd
+DIR=`(cd \`dirname $0\`; pwd -P)`
+source $DIR/../env
+
+mkdir -p $DIR/ssh
+cp $DIR/../config/ssh_config_for_lsyncd $DIR/ssh/config
+cp $LsyncdIdentityFile $DIR/ssh
+D=$(docker run -d -p 22 -v $DIR/ssh:/root/.ssh:rw -v $1:/mnt/data lsyncd)
+echo $D
+sleep 3
+docker logs $D
+
+

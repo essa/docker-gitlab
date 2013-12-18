@@ -1,0 +1,7 @@
+
+
+Host lsyncd_target
+    HostName LSYNCD_TARGET_HOST
+    User LSYNCD_USER
+
+
