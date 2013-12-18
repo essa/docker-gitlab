@@ -1,10 +1,10 @@
 
 server {
   listen   80; # The default is 80 but this here if you want to change it.
-  server_name SERVER_NAME;
+  server_name gl.uncate.org;
 
   location / {
-    proxy_pass              http://SERVER_NAME:GITLAB_PORT;
+    proxy_pass              http://gl.uncate.org:8080;
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;

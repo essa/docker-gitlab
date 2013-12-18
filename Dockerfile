@@ -77,8 +77,17 @@ RUN cd /home/git/gitlab;\
   update-rc.d gitlab defaults 21;\
   cp lib/support/logrotate/gitlab /etc/logrotate.d/gitlab
 
+# Prepare for mouting data directories
+RUN ln -s /srv/gitlab/data/tmp /home/git/gitlab/tmp  && \
+    ln -s /srv/gitlab/data/log /home/git/gitlab/log  && \
+    ln -s /srv/gitlab/data/ssh /home/git/.ssh  && \
+    sed -i -e 's/\/home\/git\/repositories/\/srv\/gitlab\/data\/repositories/g' /home/git/gitlab-shell/config.yml
+
 EXPOSE 80
 EXPOSE 22
 
-CMD ["/srv/gitlab/start.sh"]
+# expected to mount this directory
+CMD ["/srv/gitlab/scripts/start.sh"]
+
+
 

@@ -1,8 +1,6 @@
 
-config/database.yml
-config/gitlab.yml
-config/nginx
-
+env
+config/
 data/
 
 *.swp

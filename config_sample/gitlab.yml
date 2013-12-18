@@ -15,7 +15,7 @@ production: &base
   ## GitLab settings
   gitlab:
     ## Web server settings
-    host: gl.uncate.org
+    host: SERVER_NAME
     port: 80
     https: false
 
