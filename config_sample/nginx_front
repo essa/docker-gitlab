@@ -1,0 +1,19 @@
+
+server {
+        listen   80; # The default is 80 but this here if you want to change it.
+        server_name gl.uncate.org;
+
+  location / {
+    proxy_pass              http://gl.uncate.org:8080;
+    proxy_set_header        Host $host;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_connect_timeout   150;
+    proxy_send_timeout      100;
+    proxy_read_timeout      100;
+    proxy_buffers           4 32k;
+    client_max_body_size    500m; # Big number is we can post big commits.
+    client_body_buffer_size 128k;
+
+  }
+}
