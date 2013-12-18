@@ -9,11 +9,9 @@ else
      exit 1
 fi
 
-            echo "s/LSYNCD_USER/$LsyncdIdentityFile/" 
 cd config_sample
 for f in *
 do
-    echo $f
     if [ -f ../config/$f ]; then
         echo "skip $f"
     else
