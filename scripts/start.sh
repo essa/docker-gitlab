@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# load environment variables
 source /srv/gitlab/env
 
 # upstart workaround
@@ -51,5 +52,5 @@ sleep 5
 
 # start SSH to keep script in foreground
 mkdir -p /var/run/sshd
-/usr/sbin/sshd
+/usr/sbin/sshd -D
 
