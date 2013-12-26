@@ -1,6 +1,10 @@
 FROM ubuntu:12.04
 MAINTAINER Taku Nakajima <takunakajima@gmail.com>
 
+ENV RubyVersion 2.1.0
+ENV GitlabBranch 6-4-stable
+ENV GitlabShellBranch v1.8.0
+
 # Run upgrades
 RUN echo deb http://us.archive.ubuntu.com/ubuntu/ precise universe multiverse >> /etc/apt/sources.list;\
   echo deb http://us.archive.ubuntu.com/ubuntu/ precise-updates main restricted universe >> /etc/apt/sources.list;\
@@ -22,8 +26,8 @@ RUN add-apt-repository -y ppa:git-core/ppa;\
 # Install Ruby
 RUN mkdir /tmp/ruby;\
   cd /tmp/ruby;\
-  curl ftp://ftp.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p353.tar.gz | tar xz;\
-  cd ruby-2.0.0-p353;\
+  curl ftp://ftp.ruby-lang.org/pub/ruby/2.1/ruby-${RubyVersion}.tar.gz | tar xz;\
+  cd ruby-${RubyVersion};\
   chmod +x configure;\
   ./configure --disable-install-rdoc;\
   make;\
@@ -37,7 +41,7 @@ RUN adduser --disabled-login --gecos 'GitLab' git
 RUN cd /home/git;\
   su git -c "git clone https://github.com/gitlabhq/gitlab-shell.git";\
   cd gitlab-shell;\
-  su git -c "git checkout v1.8.0";\
+  su git -c "git checkout ${GitlabShellBranch}";\
   su git -c "cp config.yml.example config.yml";\
   sed -i -e 's/localhost/127.0.0.1/g' config.yml;\
   su git -c "./bin/install"
@@ -46,7 +50,7 @@ RUN cd /home/git;\
 RUN cd /home/git;\
   su git -c "git clone https://github.com/gitlabhq/gitlabhq.git gitlab";\
   cd /home/git/gitlab;\
-  su git -c "git checkout 6-3-stable"
+  su git -c "git checkout ${GitlabBranch}"
 
 # Misc configuration stuff
 RUN cd /home/git/gitlab;\
@@ -78,10 +82,13 @@ RUN cd /home/git/gitlab;\
   cp lib/support/logrotate/gitlab /etc/logrotate.d/gitlab
 
 # Prepare for mouting data directories
-RUN ln -s /srv/gitlab/data/tmp /home/git/gitlab/tmp  && \
-    ln -s /srv/gitlab/data/log /home/git/gitlab/log  && \
-    ln -s /srv/gitlab/data/ssh /home/git/.ssh  && \
+RUN rm -r /home/git/gitlab/tmp && ln -s /srv/gitlab/data/tmp /home/git/gitlab/tmp  && \
+    rm -r /home/git/gitlab/log && ln -s /srv/gitlab/data/log /home/git/gitlab/log  && \
+    rm -r /home/git/.ssh && ln -s /srv/gitlab/data/ssh /home/git/.ssh  && \
     sed -i -e 's/\/home\/git\/repositories/\/srv\/gitlab\/data\/repositories/g' /home/git/gitlab-shell/config.yml
+
+# Install additional tools and setting for maintainance and debug with ssh-session
+RUN apt-get install -y vim w3m wget zsh tmux lv && adduser git sudo 
 
 EXPOSE 80
 EXPOSE 22

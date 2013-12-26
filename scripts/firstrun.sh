@@ -21,4 +21,5 @@ sed -i 's/^timeout .*/timeout 300/' /home/git/gitlab/config/unicorn.rb
 
 
 # disable firstrun script
+echo diabling firstrun.script
 chmod -x /srv/gitlab/scripts/firstrun.sh
