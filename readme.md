@@ -1,6 +1,6 @@
 # GitLab Docker Build Script
 
-This Dockerfile will create a new Docker container running GitLab 6.3 based on crashsystems/gitlab-docker.
+This Dockerfile will create a new Docker container running GitLab 6.3 based on https://github.com/crashsystems/gitlab-docker .
 
 And these scripts will run three Docker containers.
 
