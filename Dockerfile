@@ -2,7 +2,7 @@ FROM ubuntu:12.04
 MAINTAINER Taku Nakajima <takunakajima@gmail.com>
 
 ENV RubyVersion 2.1.0
-ENV GitlabBranch 6-4-stable
+ENV GitlabBranch v6.4.3
 ENV GitlabShellBranch v1.8.0
 
 # Run upgrades
@@ -13,10 +13,10 @@ RUN echo deb http://us.archive.ubuntu.com/ubuntu/ precise universe multiverse >>
   echo initscripts hold | dpkg --set-selections;\
   echo upstart hold | dpkg --set-selections;\
   apt-get update;\
-  apt-get -y upgrade
+  apt-get -y upgrade 
 
 # Install dependencies
-RUN apt-get install -y build-essential zlib1g-dev libyaml-dev libssl-dev libgdbm-dev libreadline-dev libncurses5-dev libffi-dev curl openssh-server redis-server checkinstall libxml2-dev libxslt-dev libcurl4-openssl-dev libicu-dev sudo python python-docutils python-software-properties nginx logrotate sendmail mysql-client libmysqlclient-dev
+RUN apt-get update && apt-get install -y build-essential zlib1g-dev libyaml-dev libssl-dev libgdbm-dev libreadline-dev libncurses5-dev libffi-dev curl openssh-server redis-server checkinstall libxml2-dev libxslt-dev libcurl4-openssl-dev libicu-dev sudo python python-docutils python-software-properties nginx logrotate postfix mysql-client libmysqlclient-dev
 
 # Install Git
 RUN add-apt-repository -y ppa:git-core/ppa;\
@@ -47,6 +47,7 @@ RUN cd /home/git;\
   su git -c "./bin/install"
 
 # Install GitLab
+
 RUN cd /home/git;\
   su git -c "git clone https://github.com/gitlabhq/gitlabhq.git gitlab";\
   cd /home/git/gitlab;\
