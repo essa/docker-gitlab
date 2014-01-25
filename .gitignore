@@ -4,3 +4,10 @@ config/
 
 *.swp
 
+data/gitlab-satellites
+data/log
+data/tmp
+data/repositories
+data/ssh
+
+docker-nginx-front/sites-enabled
